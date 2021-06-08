@@ -63,10 +63,6 @@ let activeEffect: ReactiveEffect | undefined
 export const ITERATE_KEY = Symbol(__DEV__ ? 'iterate' : '')
 export const MAP_KEY_ITERATE_KEY = Symbol(__DEV__ ? 'Map key iterate' : '')
 
-export function isEffect(fn: any): fn is ReactiveEffect {
-  return fn && fn._isEffect === true
-}
-
 export function effect<T = any>(
   fn: () => T,
   options: ReactiveEffectOptions = EMPTY_OBJ
@@ -79,16 +75,6 @@ export function effect<T = any>(
     effect()
   }
   return effect
-}
-
-export function stop(effect: ReactiveEffect) {
-  if (effect.active) {
-    cleanup(effect)
-    if (effect.options.onStop) {
-      effect.options.onStop()
-    }
-    effect.active = false
-  }
 }
 
 let uid = 0
@@ -123,16 +109,6 @@ function createReactiveEffect<T = any>(
   effect.deps = []
   effect.options = options
   return effect
-}
-
-function cleanup(effect: ReactiveEffect) {
-  const { deps } = effect
-  if (deps.length) {
-    for (let i = 0; i < deps.length; i++) {
-      deps[i].delete(effect)
-    }
-    deps.length = 0
-  }
 }
 
 let shouldTrack = true
@@ -194,15 +170,6 @@ export function trigger(
   }
 
   const effects = new Set<ReactiveEffect>()
-  const add = (effectsToAdd: Set<ReactiveEffect> | undefined) => {
-    if (effectsToAdd) {
-      effectsToAdd.forEach(effect => {
-        if (effect !== activeEffect || effect.allowRecurse) {
-          effects.add(effect)
-        }
-      })
-    }
-  }
 
   if (type === TriggerOpTypes.CLEAR) {
     // collection being cleared
@@ -249,7 +216,7 @@ export function trigger(
     }
   }
 
-  const run = (effect: ReactiveEffect) => {
+  effects.forEach((effect: ReactiveEffect)=>{
     if (__DEV__ && effect.options.onTrigger) {
       effect.options.onTrigger({
         effect,
@@ -266,7 +233,39 @@ export function trigger(
     } else {
       effect()
     }
-  }
+  })
 
-  effects.forEach(run)
+  function add(effectsToAdd: Set<ReactiveEffect> | undefined) {
+    if (effectsToAdd) {
+      effectsToAdd.forEach(effect => {
+        if (effect !== activeEffect || effect.allowRecurse) {
+          effects.add(effect)
+        }
+      })
+    }
+  }
+}
+
+export function isEffect(fn: any): fn is ReactiveEffect {
+  return fn && fn._isEffect === true
+}
+
+export function stop(effect: ReactiveEffect) {
+  if (effect.active) {
+    cleanup(effect)
+    if (effect.options.onStop) {
+      effect.options.onStop()
+    }
+    effect.active = false
+  }
+}
+
+function cleanup(effect: ReactiveEffect) {
+  const { deps } = effect
+  if (deps.length) {
+    for (let i = 0; i < deps.length; i++) {
+      deps[i].delete(effect)
+    }
+    deps.length = 0
+  }
 }
