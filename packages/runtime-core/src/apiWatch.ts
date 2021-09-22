@@ -198,6 +198,7 @@ function doWatch(
     )
   }
 
+  const instance = currentInstance
   let getter: () => any
   let forceTrigger = false
   let isMultiSource = false
@@ -218,7 +219,7 @@ function doWatch(
         } else if (isReactive(s)) {
           return traverse(s)
         } else if (isFunction(s)) {
-          return callWithErrorHandling(s, currentInstance, ErrorCodes.WATCH_GETTER)
+          return callWithErrorHandling(s, instance, ErrorCodes.WATCH_GETTER)
         } else {
           __DEV__ && warnInvalidSource(s)
         }
@@ -227,11 +228,11 @@ function doWatch(
     if (cb) {
       // getter with cb
       getter = () =>
-        callWithErrorHandling(source, currentInstance, ErrorCodes.WATCH_GETTER)
+        callWithErrorHandling(source, instance, ErrorCodes.WATCH_GETTER)
     } else {
       // no cb -> simple effect
       getter = () => {
-        if (currentInstance && currentInstance.isUnmounted) {
+        if (instance && instance.isUnmounted) {
           return
         }
         if (cleanup) {
@@ -239,7 +240,7 @@ function doWatch(
         }
         return callWithAsyncErrorHandling(
           source,
-          currentInstance,
+          instance,
           ErrorCodes.WATCH_CALLBACK,
           [onInvalidate]
         )
@@ -257,7 +258,7 @@ function doWatch(
       const val = baseGetter()
       if (
         isArray(val) &&
-        checkCompatEnabled(DeprecationTypes.WATCH_ARRAY, currentInstance)
+        checkCompatEnabled(DeprecationTypes.WATCH_ARRAY, instance)
       ) {
         traverse(val)
       }
@@ -285,7 +286,7 @@ function doWatch(
     if (!cb) {
       getter()
     } else if (immediate) {
-      callWithAsyncErrorHandling(cb, currentInstance, ErrorCodes.WATCH_CALLBACK, [
+      callWithAsyncErrorHandling(cb, instance, ErrorCodes.WATCH_CALLBACK, [
         getter(),
         isMultiSource ? [] : undefined,
         onInvalidate
@@ -312,13 +313,13 @@ function doWatch(
           : hasChanged(newValue, oldValue)) ||
         (__COMPAT__ &&
           isArray(newValue) &&
-          isCompatEnabled(DeprecationTypes.WATCH_ARRAY, currentInstance))
+          isCompatEnabled(DeprecationTypes.WATCH_ARRAY, instance))
       ) {
         // cleanup before running cb again
         if (cleanup) {
           cleanup()
         }
-        callWithAsyncErrorHandling(cb, currentInstance, ErrorCodes.WATCH_CALLBACK, [
+        callWithAsyncErrorHandling(cb, instance, ErrorCodes.WATCH_CALLBACK, [
           newValue,
           // pass undefined as the old value when it's changed for the first time
           oldValue === INITIAL_WATCHER_VALUE ? undefined : oldValue,
@@ -340,11 +341,11 @@ function doWatch(
   if (flush === 'sync') {
     scheduler = job as any // the scheduler function gets called directly
   } else if (flush === 'post') {
-    scheduler = () => queuePostRenderEffect(job, currentInstance && currentInstance.suspense)
+    scheduler = () => queuePostRenderEffect(job, instance && instance.suspense)
   } else {
     // default: 'pre'
     scheduler = () => {
-      if (!currentInstance || currentInstance.isMounted) {
+      if (!instance || instance.isMounted) {
         queuePreFlushCb(job)
       } else {
         // with 'pre' option, the first call must happen before
@@ -371,7 +372,7 @@ function doWatch(
   } else if (flush === 'post') {
     queuePostRenderEffect(
       effect.run.bind(effect),
-      currentInstance && currentInstance.suspense
+      instance && instance.suspense
     )
   } else {
     effect.run()
@@ -379,8 +380,8 @@ function doWatch(
 
   return () => {
     effect.stop()
-    if (currentInstance && currentInstance.scope) {
-      remove(currentInstance.scope.effects!, effect)
+    if (instance && instance.scope) {
+      remove(instance.scope.effects!, effect)
     }
   }
 }
@@ -427,7 +428,7 @@ export function createPathGetter(ctx: any, path: string) {
   }
 }
 
-export function traverse(value: unknown, seen?: Set<unknown>) {
+export function traverse(value: unknown, seen: Set<unknown> = new Set()) {
   if (!isObject(value) || (value as any)[ReactiveFlags.SKIP]) {
     return value
   }
