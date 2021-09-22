@@ -198,7 +198,6 @@ function doWatch(
     )
   }
 
-  const instance = currentInstance
   let getter: () => any
   let forceTrigger = false
   let isMultiSource = false
@@ -219,7 +218,7 @@ function doWatch(
         } else if (isReactive(s)) {
           return traverse(s)
         } else if (isFunction(s)) {
-          return callWithErrorHandling(s, instance, ErrorCodes.WATCH_GETTER)
+          return callWithErrorHandling(s, currentInstance, ErrorCodes.WATCH_GETTER)
         } else {
           __DEV__ && warnInvalidSource(s)
         }
@@ -228,11 +227,11 @@ function doWatch(
     if (cb) {
       // getter with cb
       getter = () =>
-        callWithErrorHandling(source, instance, ErrorCodes.WATCH_GETTER)
+        callWithErrorHandling(source, currentInstance, ErrorCodes.WATCH_GETTER)
     } else {
       // no cb -> simple effect
       getter = () => {
-        if (instance && instance.isUnmounted) {
+        if (currentInstance && currentInstance.isUnmounted) {
           return
         }
         if (cleanup) {
@@ -240,7 +239,7 @@ function doWatch(
         }
         return callWithAsyncErrorHandling(
           source,
-          instance,
+          currentInstance,
           ErrorCodes.WATCH_CALLBACK,
           [onInvalidate]
         )
@@ -258,7 +257,7 @@ function doWatch(
       const val = baseGetter()
       if (
         isArray(val) &&
-        checkCompatEnabled(DeprecationTypes.WATCH_ARRAY, instance)
+        checkCompatEnabled(DeprecationTypes.WATCH_ARRAY, currentInstance)
       ) {
         traverse(val)
       }
@@ -274,7 +273,7 @@ function doWatch(
   let cleanup: () => void
   let onInvalidate: InvalidateCbRegistrator = (fn: () => void) => {
     cleanup = effect.onStop = () => {
-      callWithErrorHandling(fn, instance, ErrorCodes.WATCH_CLEANUP)
+      callWithErrorHandling(fn, currentInstance, ErrorCodes.WATCH_CLEANUP)
     }
   }
 
@@ -286,7 +285,7 @@ function doWatch(
     if (!cb) {
       getter()
     } else if (immediate) {
-      callWithAsyncErrorHandling(cb, instance, ErrorCodes.WATCH_CALLBACK, [
+      callWithAsyncErrorHandling(cb, currentInstance, ErrorCodes.WATCH_CALLBACK, [
         getter(),
         isMultiSource ? [] : undefined,
         onInvalidate
@@ -313,13 +312,13 @@ function doWatch(
           : hasChanged(newValue, oldValue)) ||
         (__COMPAT__ &&
           isArray(newValue) &&
-          isCompatEnabled(DeprecationTypes.WATCH_ARRAY, instance))
+          isCompatEnabled(DeprecationTypes.WATCH_ARRAY, currentInstance))
       ) {
         // cleanup before running cb again
         if (cleanup) {
           cleanup()
         }
-        callWithAsyncErrorHandling(cb, instance, ErrorCodes.WATCH_CALLBACK, [
+        callWithAsyncErrorHandling(cb, currentInstance, ErrorCodes.WATCH_CALLBACK, [
           newValue,
           // pass undefined as the old value when it's changed for the first time
           oldValue === INITIAL_WATCHER_VALUE ? undefined : oldValue,
@@ -341,11 +340,11 @@ function doWatch(
   if (flush === 'sync') {
     scheduler = job as any // the scheduler function gets called directly
   } else if (flush === 'post') {
-    scheduler = () => queuePostRenderEffect(job, instance && instance.suspense)
+    scheduler = () => queuePostRenderEffect(job, currentInstance && currentInstance.suspense)
   } else {
     // default: 'pre'
     scheduler = () => {
-      if (!instance || instance.isMounted) {
+      if (!currentInstance || currentInstance.isMounted) {
         queuePreFlushCb(job)
       } else {
         // with 'pre' option, the first call must happen before
@@ -372,7 +371,7 @@ function doWatch(
   } else if (flush === 'post') {
     queuePostRenderEffect(
       effect.run.bind(effect),
-      instance && instance.suspense
+      currentInstance && currentInstance.suspense
     )
   } else {
     effect.run()
@@ -380,8 +379,8 @@ function doWatch(
 
   return () => {
     effect.stop()
-    if (instance && instance.scope) {
-      remove(instance.scope.effects!, effect)
+    if (currentInstance && currentInstance.scope) {
+      remove(currentInstance.scope.effects!, effect)
     }
   }
 }
