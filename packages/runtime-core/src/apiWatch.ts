@@ -274,7 +274,7 @@ function doWatch(
   let cleanup: () => void
   let onInvalidate: InvalidateCbRegistrator = (fn: () => void) => {
     cleanup = effect.onStop = () => {
-      callWithErrorHandling(fn, instance, ErrorCodes.WATCH_CLEANUP)
+      callWithErrorHandling(fn, currentInstance, ErrorCodes.WATCH_CLEANUP)
     }
   }
 
@@ -428,7 +428,7 @@ export function createPathGetter(ctx: any, path: string) {
   }
 }
 
-export function traverse(value: unknown, seen?: Set<unknown>) {
+export function traverse(value: unknown, seen: Set<unknown> = new Set()) {
   if (!isObject(value) || (value as any)[ReactiveFlags.SKIP]) {
     return value
   }
