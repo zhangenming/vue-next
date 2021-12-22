@@ -186,35 +186,9 @@ export function h(type: any, propsOrChildren?: any, ...children: any): VNode {
       return createVNode(type, null, propsOrChildren)
     }
   } else {
-    //原式
-    // if (l > 3) {
-    // } else if (l === 3 && isVNode(children[0])) {
-    // } else {
-    //   children = children[0]
-    // }
-
-    // // 化简1
     if (l < 3 || !isVNode(children[0])) {
       children = children[0]
     }
-
-    // if (!(l > 3 || (l === 3 && isVNode(children[0])))) {
-    //   children = children[0]
-    // }
-    // // 化简2
-    // if (!(l > 3) && !(l === 3 && isVNode(children[0]))) {
-    //   children = children[0]
-    // }
-    // // 化简3
-    // if (l <= 3 && (l !== 3 || !isVNode(children[0]))) {
-    //   children = children[0]
-    // }
-
-    // false false
-    // !(true || true)
-
-    // a b 都对 才错
-
     return createVNode(type, propsOrChildren, children)
   }
 }
