@@ -186,9 +186,18 @@ export function h(type: any, propsOrChildren?: any, ...children: any): VNode {
       return createVNode(type, null, propsOrChildren)
     }
   } else {
-    if (!(l >= 3 && isVNode(children[0]))) {
-      createVNode(type, propsOrChildren, children[0])
+    // false false
+    // !(true || true)
+
+    if (!(l > 3 || (l === 3 && isVNode(children[0])))) {
+      children = children[0]
     }
+
+    // if (l > 3) {
+    // } else if (l === 3 && isVNode(children[0])) {
+    // } else {
+    //   children = children[0]
+    // }
     return createVNode(type, propsOrChildren, children)
   }
 }
