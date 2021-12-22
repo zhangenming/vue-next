@@ -194,17 +194,17 @@ export function h(type: any, propsOrChildren?: any, ...children: any): VNode {
     // }
 
     // // 化简1
-    // if (!(l > 3 || (l === 3 && isVNode(children[0])))) {
-    //   children = children[0]
-    // }
+    if (!(l > 3 || (l === 3 && isVNode(children[0])))) {
+      children = children[0]
+    }
     // // 化简2
     // if (!(l > 3) && !(l === 3 && isVNode(children[0]))) {
     //   children = children[0]
     // }
     // // 化简3
-    if (l <= 3 && (l !== 3 || !isVNode(children[0]))) {
-      children = children[0]
-    }
+    // if (l <= 3 && (l !== 3 || !isVNode(children[0]))) {
+    //   children = children[0]
+    // }
 
     // false false
     // !(true || true)
