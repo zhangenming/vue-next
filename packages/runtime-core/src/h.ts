@@ -192,6 +192,13 @@ export function h(type: any, propsOrChildren?: any, ...children: any): VNode {
     if (!(l > 3 || (l === 3 && isVNode(children[0])))) {
       children = children[0]
     }
+    if (!(l > 3) && !(l === 3 && isVNode(children[0]))) {
+      children = children[0]
+    }
+    if (l <= 3 && (l !== 3 || !isVNode(children[0]))) {
+      children = children[0]
+    }
+    // a b 都对 才错
 
     // if (l > 3) {
     // } else if (l === 3 && isVNode(children[0])) {
