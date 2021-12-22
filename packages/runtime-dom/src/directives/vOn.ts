@@ -33,10 +33,9 @@ const modifierGuards: Record<
  * @private
  */
 export const withModifiers = (fn: Function, modifiers: string[]) => {
-  const guards = () => modifiers.map(modifier => modifierGuards[modifier])
   return (event: Event, ...args: unknown[]) => {
-    for (let i = 0; i < guards().length; i++) {
-      const guard = guards()[i]
+    for (let i = 0; i < modifiers.length; i++) {
+      const guard = modifierGuards[modifiers[i]]
       if (guard && guard(event, modifiers)) return
     }
     return fn(event, ...args)

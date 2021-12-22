@@ -170,7 +170,7 @@ export function h<P>(
   children?: RawChildren | RawSlots
 ): VNode
 
-// Actual implementation.
+// Actual implementation
 export function h(type: any, propsOrChildren?: any, children?: any): VNode {
   const l = arguments.length
   if (l === 2) {
@@ -188,7 +188,7 @@ export function h(type: any, propsOrChildren?: any, children?: any): VNode {
   } else {
     if (l > 3) {
       children = Array.prototype.slice.call(arguments, 2)
-    } else if (l === 3 && isVNode(children)) {
+    } else if (l === 3) {
       children = [children]
     }
     return createVNode(type, propsOrChildren, children)
