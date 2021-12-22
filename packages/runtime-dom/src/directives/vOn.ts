@@ -36,7 +36,8 @@ export const withModifiers = (fn: Function, modifiers: string[]) => {
   const guards = modifiers.map(modifier => modifierGuards[modifier])
   return (event: Event, ...args: unknown[]) => {
     for (let i = 0; i < guards.length; i++) {
-      if (guards[i](event, modifiers)) return
+      const guard = guards[i]
+      if (guard && guard(event, modifiers)) return
     }
     return fn(event, ...args)
   }
