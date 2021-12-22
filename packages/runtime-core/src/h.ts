@@ -172,8 +172,7 @@ export function h<P>(
 
 // Actual implementation
 export function h(type: any, propsOrChildren?: any, ...children: any): VNode {
-  const l = arguments.length
-  if (l === 2) {
+  if (children.length === 0 && propsOrChildren) {
     if (isObject(propsOrChildren) && !isArray(propsOrChildren)) {
       // single vnode without props
       if (isVNode(propsOrChildren)) {
@@ -186,10 +185,8 @@ export function h(type: any, propsOrChildren?: any, ...children: any): VNode {
       return createVNode(type, null, propsOrChildren)
     }
   } else {
-    if (l < 3) {
-      children = undefined
-    } else if (!isVNode(children[0])) {
-      children = undefined
+    if (children.length === 0 || !isVNode(children[0])) {
+      children = children[0]
     }
     return createVNode(type, propsOrChildren, children)
   }
