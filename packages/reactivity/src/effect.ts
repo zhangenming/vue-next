@@ -179,19 +179,19 @@ export function callWithStopTracking(fn: any) {
   trackStack.push(shouldTrack)
   shouldTrack = false
   const res = fn()
-  trackStack.push(shouldTrack)
-  shouldTrack = true
+  const last = trackStack.pop()
+  shouldTrack = last === undefined ? true : last
   return res
-}
-
-export function enableTracking() {
-  trackStack.push(shouldTrack)
-  shouldTrack = true
 }
 
 export function resetTracking() {
   const last = trackStack.pop()
   shouldTrack = last === undefined ? true : last
+}
+
+export function enableTracking() {
+  trackStack.push(shouldTrack)
+  shouldTrack = true
 }
 
 export function track(target: object, type: TrackOpTypes, key: unknown) {
