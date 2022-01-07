@@ -590,11 +590,8 @@ export function setupComponent(
   initProps(instance, props, isStateful, isSSR)
   initSlots(instance, children)
 
-  const setupResult = isStateful
-    ? setupStatefulComponent(instance, isSSR)
-    : undefined
+  isStateful ? setupStatefulComponent(instance, isSSR) : undefined
   isInSSRComponentSetup = false
-  return setupResult
 }
 
 function setupStatefulComponent(
