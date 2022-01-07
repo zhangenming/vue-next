@@ -175,6 +175,15 @@ export function pauseTracking() {
   shouldTrack = false
 }
 
+export function callWithStopTracking(fn: any) {
+  trackStack.push(shouldTrack)
+  shouldTrack = false
+  const res = fn()
+  trackStack.push(shouldTrack)
+  shouldTrack = true
+  return res
+}
+
 export function enableTracking() {
   trackStack.push(shouldTrack)
   shouldTrack = true
