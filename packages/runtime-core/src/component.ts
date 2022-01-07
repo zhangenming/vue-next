@@ -590,8 +590,11 @@ export function setupComponent(
   initProps(instance, props, isStateful, isSSR)
   initSlots(instance, children)
 
-  isStateful && setupStatefulComponent(instance, isSSR)
+  const setupResult = isStateful
+    ? setupStatefulComponent(instance, isSSR)
+    : undefined
   isInSSRComponentSetup = false
+  return setupResult
 }
 
 function setupStatefulComponent(
@@ -654,7 +657,7 @@ function setupStatefulComponent(
 
       if (isSSR) {
         // return the promise so server-renderer can wait on it
-        setupResult
+        return setupResult
           .then((resolvedResult: unknown) => {
             handleSetupResult(instance, resolvedResult, isSSR)
           })
