@@ -654,7 +654,7 @@ function setupStatefulComponent(
 
       if (isSSR) {
         // return the promise so server-renderer can wait on it
-        setupResult
+        return setupResult
           .then((resolvedResult: unknown) => {
             handleSetupResult(instance, resolvedResult, isSSR)
           })
