@@ -11,7 +11,7 @@ import {
   isReadonly
 } from './reactive'
 import { TrackOpTypes, TriggerOpTypes } from './operations'
-import { track, trigger, ITERATE_KEY, callWithStopTracking } from './effect'
+import { track, trigger, ITERATE_KEY, callWithoutTracking } from './effect'
 import {
   isObject,
   hasOwn,
@@ -63,10 +63,9 @@ function createArrayInstrumentations() {
   // which leads to infinite loops in some cases (#2137)
   ;(['push', 'pop', 'shift', 'unshift', 'splice'] as const).forEach(key => {
     instrumentations[key] = function (this: unknown[], ...args: unknown[]) {
-      const res = callWithStopTracking(() =>
+      return callWithoutTracking(() =>
         (toRaw(this) as any)[key].apply(this, args)
       )
-      return res
     }
   })
   return instrumentations
