@@ -185,12 +185,12 @@ export function resetTracking() {
   shouldTrack = last === undefined ? true : last
 }
 
+let old
 export function callWithoutTracking(fn: any) {
-  trackStack.push(shouldTrack)
+  old = shouldTrack
   shouldTrack = false
   const res = fn()
-  const last = trackStack.pop()
-  shouldTrack = last === undefined ? true : last
+  shouldTrack = old
   return res
 }
 
