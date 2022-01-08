@@ -233,12 +233,10 @@ export function renderComponentRoot(
 
   if (__DEV__ && setRoot) {
     setRoot(root)
-  } else {
-    result = root
   }
 
   setCurrentRenderingInstance(prev)
-  return result
+  return root
 }
 
 /**
