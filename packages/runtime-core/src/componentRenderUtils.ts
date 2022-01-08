@@ -72,7 +72,15 @@ export function renderComponentRoot(
       // runtime-compiled render functions using `with` block.
       const proxyToUse = withProxy || proxy
       result = normalizeVNode(
-        render!(proxyToUse!, renderCache, props, setupState, data, ctx)
+        render!.call(
+          proxyToUse,
+          proxyToUse!,
+          renderCache,
+          props,
+          setupState,
+          data,
+          ctx
+        )
       )
       fallthroughAttrs = attrs
     } else {
