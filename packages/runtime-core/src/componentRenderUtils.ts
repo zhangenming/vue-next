@@ -235,7 +235,7 @@ export function renderComponentRoot(
   }
 
   setCurrentRenderingInstance(prev)
-  return root
+  return result
 }
 
 /**
