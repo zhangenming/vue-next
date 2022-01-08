@@ -1543,8 +1543,8 @@ function baseCreateRenderer(
       instance.scope // track it in component's effect scope
     ))
 
-    const update = (instance.update = () => effect.run()) as any
-    update.id = instance.uid
+    instance.update = () => effect.run() as any
+    instance.update.id = instance.uid
     // allowRecurse
     // #1801, #2043 component render effects should allow recursive updates
     toggleRecurse(instance, true)
@@ -1557,10 +1557,10 @@ function baseCreateRenderer(
         ? e => invokeArrayFns(instance.rtg!, e)
         : void 0
       // @ts-ignore (for scheduler)
-      update.ownerInstance = instance
+      instance.update.ownerInstance = instance
     }
 
-    update()
+    effect.run()
   }
 
   const updateComponentPreRender = (
