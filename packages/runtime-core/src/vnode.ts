@@ -592,36 +592,12 @@ export function cloneVNode<T, U>(
 ): VNode<T, U> {
   // This is intentionally NOT using spread or extend to avoid the runtime
   // key enumeration cost.
-  const {
-    props,
-    ref,
-    patchFlag,
-    children,
-    scopeId,
-    slotScopeIds,
-    target,
-    targetAnchor,
-    staticCount,
-    shapeFlag,
-    type,
-    dynamicProps,
-    dynamicChildren,
-    appContext,
-    dirs,
-    transition,
-    component,
-    suspense,
-    ssContent,
-    ssFallback,
-    el,
-    anchor
-  } = vnode
-
+  const { props, ref, patchFlag, children } = vnode
   const mergedProps = extraProps ? mergeProps(props || {}, extraProps) : props
   const cloned: VNode = {
     __v_isVNode: true,
     __v_skip: true,
-    type,
+    type: vnode.type,
     props: mergedProps,
     key: mergedProps && normalizeKey(mergedProps),
     ref:
@@ -635,42 +611,42 @@ export function cloneVNode<T, U>(
             : [ref, normalizeRef(extraProps)!]
           : normalizeRef(extraProps)
         : ref,
-    scopeId,
-    slotScopeIds,
+    scopeId: vnode.scopeId,
+    slotScopeIds: vnode.slotScopeIds,
     children:
       __DEV__ && patchFlag === PatchFlags.HOISTED && isArray(children)
         ? (children as VNode[]).map(deepCloneVNode)
         : children,
-    target,
-    targetAnchor,
-    staticCount,
-    shapeFlag,
+    target: vnode.target,
+    targetAnchor: vnode.targetAnchor,
+    staticCount: vnode.staticCount,
+    shapeFlag: vnode.shapeFlag,
     // if the vnode is cloned with extra props, we can no longer assume its
     // existing patch flag to be reliable and need to add the FULL_PROPS flag.
     // note: perserve flag for fragments since they use the flag for children
     // fast paths only.
     patchFlag:
-      extraProps && type !== Fragment
+      extraProps && vnode.type !== Fragment
         ? patchFlag === -1 // hoisted node
           ? PatchFlags.FULL_PROPS
           : patchFlag | PatchFlags.FULL_PROPS
         : patchFlag,
-    dynamicProps,
-    dynamicChildren,
-    appContext,
-    dirs,
-    transition,
+    dynamicProps: vnode.dynamicProps,
+    dynamicChildren: vnode.dynamicChildren,
+    appContext: vnode.appContext,
+    dirs: vnode.dirs,
+    transition: vnode.transition,
 
     // These should technically only be non-null on mounted VNodes. However,
     // they *should* be copied for kept-alive vnodes. So we just always copy
     // them since them being non-null during a mount doesn't affect the logic as
     // they will simply be overwritten.
-    component,
-    suspense,
-    ssContent: ssContent && cloneVNode(ssContent),
-    ssFallback: ssFallback && cloneVNode(ssFallback),
-    el,
-    anchor
+    component: vnode.component,
+    suspense: vnode.suspense,
+    ssContent: vnode.ssContent && cloneVNode(vnode.ssContent),
+    ssFallback: vnode.ssFallback && cloneVNode(vnode.ssFallback),
+    el: vnode.el,
+    anchor: vnode.anchor
   }
   if (__COMPAT__) {
     defineLegacyVNodeProperties(cloned)

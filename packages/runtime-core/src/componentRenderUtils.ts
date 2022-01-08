@@ -85,14 +85,14 @@ export function renderComponentRoot(
       fallthroughAttrs = attrs
     } else {
       // functional
-      Component as FunctionalComponent
+      const render = Component as FunctionalComponent
       // in dev, mark attrs accessed if optional props (attrs === props)
       if (__DEV__ && attrs === props) {
         markAttrsAccessed()
       }
       result = normalizeVNode(
-        Component.length > 1
-          ? (Component as FunctionalComponent)(
+        render.length > 1
+          ? render(
               props,
               __DEV__
                 ? {
@@ -105,10 +105,7 @@ export function renderComponentRoot(
                   }
                 : { attrs, slots, emit }
             )
-          : (Component as FunctionalComponent)(
-              props,
-              null as any /* we know it doesn't need it */
-            )
+          : render(props, null as any /* we know it doesn't need it */)
       )
       fallthroughAttrs = Component.props
         ? attrs
