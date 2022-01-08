@@ -228,14 +228,13 @@ export function renderComponentRoot(
     root.transition = vnode.transition
   }
 
+  setCurrentRenderingInstance(prev)
+
   if (__DEV__ && setRoot) {
     setRoot(root)
-  } else {
-    result = root
   }
 
-  setCurrentRenderingInstance(prev)
-  return result
+  return root
 }
 
 /**
