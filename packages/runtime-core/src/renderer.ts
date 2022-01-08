@@ -1544,9 +1544,10 @@ function baseCreateRenderer(
     ))
 
     // const update = (instance.update = effect.run.bind(effect) as any)
-    const update = (instance.update = (() => effect.run.call(effect)) as any)
+    // const update = (instance.update = (() => effect.run.call(effect)) as any)
+    instance.update = () => effect.run()
 
-    update.id = instance.uid
+    instance.update.id = instance.uid
     // allowRecurse
     // #1801, #2043 component render effects should allow recursive updates
     toggleRecurse(instance, true)
@@ -1559,10 +1560,10 @@ function baseCreateRenderer(
         ? e => invokeArrayFns(instance.rtg!, e)
         : void 0
       // @ts-ignore (for scheduler)
-      update.ownerInstance = instance
+      instance.update.ownerInstance = instance
     }
 
-    update()
+    instance.update()
   }
 
   const updateComponentPreRender = (
