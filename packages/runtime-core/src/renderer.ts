@@ -1537,29 +1537,29 @@ function baseCreateRenderer(
     }
 
     // create reactive effect for rendering
-    instance.effect = new ReactiveEffect(
+    const effect = (instance.effect = new ReactiveEffect(
       componentUpdateFn,
       () => queueJob(instance.update),
       instance.scope // track it in component's effect scope
-    )
-    instance.update = instance.effect.run
-    instance.update.id = instance.uid
+    ))
+    const update = (instance.update = effect.run) as any
+    update.id = instance.uid
     // allowRecurse
     // #1801, #2043 component render effects should allow recursive updates
     toggleRecurse(instance, true)
 
     if (__DEV__) {
-      instance.effect.onTrack = instance.rtc
+      effect.onTrack = instance.rtc
         ? e => invokeArrayFns(instance.rtc!, e)
         : void 0
-      instance.effect.onTrigger = instance.rtg
+      effect.onTrigger = instance.rtg
         ? e => invokeArrayFns(instance.rtg!, e)
         : void 0
       // @ts-ignore (for scheduler)
-      instance.update.ownerInstance = instance
+      update.ownerInstance = instance
     }
 
-    instance.effect.run()
+    effect.run()
   }
 
   const updateComponentPreRender = (
