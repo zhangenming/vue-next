@@ -42,7 +42,8 @@ import {
   queuePostFlushCb,
   flushPostFlushCbs,
   invalidateJob,
-  flushPreFlushCbs
+  flushPreFlushCbs,
+  SchedulerJob
 } from './scheduler'
 import { pauseTracking, resetTracking, ReactiveEffect } from '@vue/reactivity'
 import { updateProps } from './componentProps'
@@ -1543,11 +1544,8 @@ function baseCreateRenderer(
       instance.scope // track it in component's effect scope
     ))
 
-    // const update = (instance.update = effect.run.bind(effect) as any)
-    // const update = (instance.update = (() => effect.run.call(effect)) as any)
-    instance.update = () => effect.run()
-
-    instance.update.id = instance.uid
+    const update = (instance.update = () => effect.run()) as any
+    update.id = instance.uid
     // allowRecurse
     // #1801, #2043 component render effects should allow recursive updates
     toggleRecurse(instance, true)
@@ -1560,10 +1558,10 @@ function baseCreateRenderer(
         ? e => invokeArrayFns(instance.rtg!, e)
         : void 0
       // @ts-ignore (for scheduler)
-      instance.update.ownerInstance = instance
+      update.ownerInstance = instance
     }
 
-    instance.update()
+    update()
   }
 
   const updateComponentPreRender = (
