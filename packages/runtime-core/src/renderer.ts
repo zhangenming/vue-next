@@ -1544,7 +1544,7 @@ function baseCreateRenderer(
       instance.scope // track it in component's effect scope
     ))
 
-    const update = (instance.update = () => effect.run()) as any
+    const update = (instance.update = effect.run.bind(effect) as SchedulerJob)
     update.id = instance.uid
     // allowRecurse
     // #1801, #2043 component render effects should allow recursive updates
