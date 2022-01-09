@@ -157,7 +157,7 @@ export function renderComponentRoot(
             if (!isModelListener(key)) {
               // remove `on`, lowercase first letter to reflect event casing
               // accurately
-              eventAttrs += key[2].toLowerCase() + key.slice(3)
+              eventAttrs += key[2].toLowerCase() + key.slice(3) + ', '
             }
           } else {
             extraAttrs.push(key)
@@ -171,10 +171,10 @@ export function renderComponentRoot(
               `because component renders fragment or text root nodes.`
           )
         }
-        if (eventAttrs.length) {
+        if (eventAttrs) {
           warn(
             `Extraneous non-emits event listeners (` +
-              `${eventAttrs}) ` +
+              `${eventAttrs.slice(0, -2)}) ` +
               `were passed to component but could not be automatically inherited ` +
               `because component renders fragment or text root nodes. ` +
               `If the listener is intended to be a component custom event listener only, ` +
