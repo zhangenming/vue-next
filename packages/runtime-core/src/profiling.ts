@@ -37,14 +37,13 @@ export function endMeasure(instance: ComponentInternalInstance, type: string) {
 }
 
 function isSupported() {
-  if (supported !== undefined) {
-    return supported
-  }
-  if (typeof window !== 'undefined' && window.performance) {
-    supported = true
-    perf = window.performance
-  } else {
-    supported = false
+  if (supported === undefined) {
+    if (typeof window !== 'undefined' && window.performance) {
+      supported = true
+      perf = window.performance
+    } else {
+      supported = false
+    }
   }
   return supported
 }
