@@ -1,10 +1,7 @@
 import { ComponentInternalInstance, formatComponentName } from './component'
 import { devtoolsPerfStart, devtoolsPerfEnd } from './devtools'
 
-let perf: any
-if (typeof window !== 'undefined' && window.performance) {
-  perf = window.performance
-}
+const perf = typeof window !== 'undefined' && window.performance
 const timer = perf ? () => perf.now() : Date.now
 
 export function startMeasure(
