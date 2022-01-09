@@ -1,10 +1,9 @@
 import { ComponentInternalInstance, formatComponentName } from './component'
-import { devtoolsPerfEnd, devtoolsPerfStart } from './devtools'
+import { devtoolsPerfStart, devtoolsPerfEnd } from './devtools'
 
-let perf: any
+let perf: any = window.performance
 let timer: any
-if (typeof window !== 'undefined' && window.performance) {
-  perf = window.performance
+if (perf) {
   timer = perf.now
 } else {
   timer = Date.now
