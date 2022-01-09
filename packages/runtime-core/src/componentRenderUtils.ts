@@ -124,10 +124,10 @@ export function renderComponentRoot(
   let setRoot: ((root: VNode) => void) | undefined = undefined
   if (
     __DEV__ &&
-    root.patchFlag > 0 &&
-    root.patchFlag & PatchFlags.DEV_ROOT_FRAGMENT
+    result.patchFlag > 0 &&
+    result.patchFlag & PatchFlags.DEV_ROOT_FRAGMENT
   ) {
-    ;[root, setRoot] = getChildRoot(root)
+    ;[root, setRoot] = getChildRoot(result)
   }
 
   if (fallthroughAttrs && inheritAttrs !== false) {
