@@ -1,5 +1,5 @@
 import { ComponentInternalInstance, formatComponentName } from './component'
-import { devtoolsPerfEnd, devtoolsPerfStart } from './devtools'
+import { devtoolsPerfStart, devtoolsPerfEnd } from './devtools'
 
 let perf: any
 
@@ -12,11 +12,11 @@ export function startMeasure(
   instance: ComponentInternalInstance,
   type: string
 ) {
+  devtoolsPerfStart(instance, type, timer())
+
   if (perf && instance.appContext.config.performance) {
     perf.mark(`vue-${type}-${instance.uid}`)
   }
-
-  devtoolsPerfStart(instance, type, timer())
 }
 
 export function endMeasure(instance: ComponentInternalInstance, type: string) {
