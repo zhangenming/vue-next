@@ -132,7 +132,7 @@ export function renderComponentRoot(
 
   if (fallthroughAttrs && inheritAttrs !== false) {
     const keys = Object.keys(fallthroughAttrs)
-    const { shapeFlag } = result
+    const { shapeFlag } = root
     if (keys.length) {
       if (shapeFlag & (ShapeFlags.ELEMENT | ShapeFlags.COMPONENT)) {
         if (propsOptions && keys.some(isModelListener)) {
@@ -145,7 +145,7 @@ export function renderComponentRoot(
             propsOptions
           )
         }
-        root = result = cloneVNode(result, fallthroughAttrs)
+        root = result = cloneVNode(root, fallthroughAttrs)
       } else if (__DEV__ && !accessedAttrs && root.type !== Comment) {
         const allAttrs = Object.keys(attrs)
         const eventAttrs: string[] = [] // 性能优化
