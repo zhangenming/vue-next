@@ -1,8 +1,8 @@
 import { ComponentInternalInstance, formatComponentName } from './component'
 import { devtoolsPerfStart, devtoolsPerfEnd } from './devtools'
 
-let perf: any = window.performance
 let timer: any
+const perf = window.performance
 if (perf) {
   timer = () => perf.now()
 } else {
