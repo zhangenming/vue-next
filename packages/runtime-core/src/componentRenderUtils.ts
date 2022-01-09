@@ -189,7 +189,7 @@ export function renderComponentRoot(
     __COMPAT__ &&
     isCompatEnabled(DeprecationTypes.INSTANCE_ATTRS_CLASS_STYLE, instance) &&
     vnode.shapeFlag & ShapeFlags.STATEFUL_COMPONENT &&
-    result.shapeFlag & (ShapeFlags.ELEMENT | ShapeFlags.COMPONENT)
+    root.shapeFlag & (ShapeFlags.ELEMENT | ShapeFlags.COMPONENT)
   ) {
     const { class: cls, style } = vnode.props || {}
     if (cls || style) {
