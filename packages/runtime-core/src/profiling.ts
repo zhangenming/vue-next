@@ -1,29 +1,25 @@
 import { ComponentInternalInstance, formatComponentName } from './component'
 import { devtoolsPerfEnd, devtoolsPerfStart } from './devtools'
 
-let supported: boolean
 let perf: any
 
 if (typeof window !== 'undefined' && window.performance) {
-  supported = true
   perf = window.performance
-} else {
-  supported = false
 }
 
 export function startMeasure(
   instance: ComponentInternalInstance,
   type: string
 ) {
-  if (instance.appContext.config.performance && supported) {
+  if (instance.appContext.config.performance && perf) {
     perf.mark(`vue-${type}-${instance.uid}`)
   }
 
-  devtoolsPerfStart(instance, type, supported ? perf.now() : Date.now())
+  devtoolsPerfStart(instance, type, perf ? perf.now() : Date.now())
 }
 
 export function endMeasure(instance: ComponentInternalInstance, type: string) {
-  if (instance.appContext.config.performance && supported) {
+  if (instance.appContext.config.performance && perf) {
     const startTag = `vue-${type}-${instance.uid}`
     const endTag = startTag + `:end`
     perf.mark(endTag)
@@ -36,5 +32,5 @@ export function endMeasure(instance: ComponentInternalInstance, type: string) {
     perf.clearMarks(endTag)
   }
 
-  devtoolsPerfEnd(instance, type, supported ? perf.now() : Date.now())
+  devtoolsPerfEnd(instance, type, perf ? perf.now() : Date.now())
 }
