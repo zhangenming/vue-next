@@ -124,15 +124,15 @@ export function renderComponentRoot(
   let setRoot: ((root: VNode) => void) | undefined = undefined
   if (
     __DEV__ &&
-    root.patchFlag > 0 &&
-    root.patchFlag & PatchFlags.DEV_ROOT_FRAGMENT
+    result.patchFlag > 0 &&
+    result.patchFlag & PatchFlags.DEV_ROOT_FRAGMENT
   ) {
-    ;[root, setRoot] = getChildRoot(root)
+    ;[root, setRoot] = getChildRoot(result)
   }
 
   if (fallthroughAttrs && inheritAttrs !== false) {
     const keys = Object.keys(fallthroughAttrs)
-    const { shapeFlag } = result
+    const { shapeFlag } = root
     if (keys.length) {
       if (shapeFlag & (ShapeFlags.ELEMENT | ShapeFlags.COMPONENT)) {
         if (propsOptions && keys.some(isModelListener)) {
@@ -145,7 +145,7 @@ export function renderComponentRoot(
             propsOptions
           )
         }
-        result = cloneVNode(result, fallthroughAttrs)
+        root = cloneVNode(root, fallthroughAttrs)
       } else if (__DEV__ && !accessedAttrs && root.type !== Comment) {
         const allAttrs = Object.keys(attrs)
         const eventAttrs: string[] = [] // 性能优化
@@ -189,7 +189,7 @@ export function renderComponentRoot(
     __COMPAT__ &&
     isCompatEnabled(DeprecationTypes.INSTANCE_ATTRS_CLASS_STYLE, instance) &&
     vnode.shapeFlag & ShapeFlags.STATEFUL_COMPONENT &&
-    result.shapeFlag & (ShapeFlags.ELEMENT | ShapeFlags.COMPONENT)
+    root.shapeFlag & (ShapeFlags.ELEMENT | ShapeFlags.COMPONENT)
   ) {
     const { class: cls, style } = vnode.props || {}
     if (cls || style) {
@@ -200,7 +200,7 @@ export function renderComponentRoot(
           getComponentName(instance.type)
         )
       }
-      result = cloneVNode(result, {
+      root = cloneVNode(root, {
         class: cls,
         style: style
       })
@@ -215,7 +215,7 @@ export function renderComponentRoot(
           `The directives will not function as intended.`
       )
     }
-    result.dirs = result.dirs ? result.dirs.concat(vnode.dirs) : vnode.dirs
+    root.dirs = root.dirs ? root.dirs.concat(vnode.dirs) : vnode.dirs
   }
   // inherit transition data
   if (vnode.transition) {
@@ -225,7 +225,7 @@ export function renderComponentRoot(
           `that cannot be animated.`
       )
     }
-    result.transition = vnode.transition
+    root.transition = vnode.transition
   }
 
   setCurrentRenderingInstance(prev)
@@ -236,7 +236,7 @@ export function renderComponentRoot(
     return result
   }
 
-  return result
+  return root
 }
 
 /**
