@@ -18,7 +18,7 @@ export function startMeasure(
     perf.mark(`vue-${type}-${instance.uid}`)
   }
 
-  devtoolsPerfStart(instance, type, timer)
+  devtoolsPerfStart(instance, type, timer())
 }
 
 export function endMeasure(instance: ComponentInternalInstance, type: string) {
@@ -35,5 +35,5 @@ export function endMeasure(instance: ComponentInternalInstance, type: string) {
     perf.clearMarks(endTag)
   }
 
-  devtoolsPerfEnd(instance, type, timer)
+  devtoolsPerfEnd(instance, type, timer())
 }
