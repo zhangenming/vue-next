@@ -174,8 +174,8 @@ export function renderComponentRoot(
         if (eventAttrs) {
           warn(
             `Extraneous non-emits event listeners (` +
-              `${eventAttrs.slice(0, -2)}) ` +
-              `were passed to component but could not be automatically inherited ` +
+              eventAttrs.slice(0, -2) +
+              `) were passed to component but could not be automatically inherited ` +
               `because component renders fragment or text root nodes. ` +
               `If the listener is intended to be a component custom event listener only, ` +
               `declare it using the "emits" option.`
