@@ -116,34 +116,18 @@ function createDevtoolsComponentHook(hook: DevtoolsHooks) {
   }
 }
 
-export const devtoolsPerfStart = /*#__PURE__*/ (
-  component: ComponentInternalInstance,
-  type: string,
-  time: number
-) => {
-  emit(
-    DevtoolsHooks.PERFORMANCE_START,
-    component.appContext.app,
-    component.uid,
-    component,
-    type,
-    time
-  )
-}
+export const devtoolsPerfStart = /*#__PURE__*/ createDevtoolsPerformanceHook(
+  DevtoolsHooks.PERFORMANCE_START
+)
 
-export const devtoolsPerfEnd = /*#__PURE__*/ (
-  component: ComponentInternalInstance,
-  type: string,
-  time: number
-) => {
-  emit(
-    DevtoolsHooks.PERFORMANCE_END,
-    component.appContext.app,
-    component.uid,
-    component,
-    type,
-    time
-  )
+export const devtoolsPerfEnd = /*#__PURE__*/ createDevtoolsPerformanceHook(
+  DevtoolsHooks.PERFORMANCE_END
+)
+
+function createDevtoolsPerformanceHook(hook: DevtoolsHooks) {
+  return (component: ComponentInternalInstance, type: string, time: number) => {
+    emit(hook, component.appContext.app, component.uid, component, type, time)
+  }
 }
 
 export function devtoolsComponentEmit(

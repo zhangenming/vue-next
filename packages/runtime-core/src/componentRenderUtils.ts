@@ -148,7 +148,7 @@ export function renderComponentRoot(
         root = cloneVNode(root, fallthroughAttrs)
       } else if (__DEV__ && !accessedAttrs && root.type !== Comment) {
         const allAttrs = Object.keys(attrs)
-        const eventAttrs: string[] = [] // 性能优化
+        let eventAttrs = '' // 性能优化
         const extraAttrs: string[] = []
         for (let i = 0, l = allAttrs.length; i < l; i++) {
           const key = allAttrs[i]
@@ -157,7 +157,7 @@ export function renderComponentRoot(
             if (!isModelListener(key)) {
               // remove `on`, lowercase first letter to reflect event casing
               // accurately
-              eventAttrs.push(key[2].toLowerCase() + key.slice(3))
+              eventAttrs += key[2].toLowerCase() + key.slice(3)
             }
           } else {
             extraAttrs.push(key)
@@ -174,7 +174,7 @@ export function renderComponentRoot(
         if (eventAttrs.length) {
           warn(
             `Extraneous non-emits event listeners (` +
-              `${eventAttrs.join(', ')}) ` +
+              `${eventAttrs}) ` +
               `were passed to component but could not be automatically inherited ` +
               `because component renders fragment or text root nodes. ` +
               `If the listener is intended to be a component custom event listener only, ` +
@@ -209,7 +209,8 @@ export function renderComponentRoot(
 
   // inherit directives
   if (vnode.dirs) {
-    if (__DEV__ && !isElementRoot(root)) { //正则
+    if (__DEV__ && !isElementRoot(root)) {
+      //正则
       warn(
         `Runtime directive used on component with non-element root node. ` +
           `The directives will not function as intended.`
@@ -231,6 +232,7 @@ export function renderComponentRoot(
   setCurrentRenderingInstance(prev)
 
   //正则处理 a = b
+  //start end -> measue with
   if (__DEV__ && setRoot) {
     setRoot(root)
     return result
