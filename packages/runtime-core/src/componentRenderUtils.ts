@@ -145,7 +145,7 @@ export function renderComponentRoot(
             propsOptions
           )
         }
-        result = cloneVNode(result, fallthroughAttrs)
+        root = cloneVNode(result, fallthroughAttrs)
       } else if (__DEV__ && !accessedAttrs && root.type !== Comment) {
         const allAttrs = Object.keys(attrs)
         const eventAttrs: string[] = [] // 性能优化
