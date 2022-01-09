@@ -1373,7 +1373,6 @@ function baseCreateRenderer(
           if (__DEV__) {
             startMeasure(instance, `patch`)
           }
-
           patch(
             null,
             subTree,

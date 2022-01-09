@@ -12,9 +12,7 @@ export function startMeasure(
     perf.mark(`vue-${type}-${instance.uid}`)
   }
 
-  if (__FEATURE_PROD_DEVTOOLS__) {
-    devtoolsPerfStart(instance, type, supported ? perf.now() : Date.now())
-  }
+  devtoolsPerfStart(instance, type, supported ? perf.now() : Date.now())
 }
 
 export function endMeasure(instance: ComponentInternalInstance, type: string) {
@@ -31,9 +29,7 @@ export function endMeasure(instance: ComponentInternalInstance, type: string) {
     perf.clearMarks(endTag)
   }
 
-  if (__FEATURE_PROD_DEVTOOLS__) {
-    devtoolsPerfEnd(instance, type, supported ? perf.now() : Date.now())
-  }
+  devtoolsPerfEnd(instance, type, supported ? perf.now() : Date.now())
 }
 
 function isSupported() {
