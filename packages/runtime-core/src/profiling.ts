@@ -6,20 +6,21 @@ let perf: any
 if (typeof window !== 'undefined' && window.performance) {
   perf = window.performance
 }
+const timer = perf ? () => perf.now() : Date.now
 
 export function startMeasure(
   instance: ComponentInternalInstance,
   type: string
 ) {
-  if (instance.appContext.config.performance && perf) {
+  if (perf && instance.appContext.config.performance) {
     perf.mark(`vue-${type}-${instance.uid}`)
   }
 
-  devtoolsPerfStart(instance, type, perf ? perf.now() : Date.now())
+  devtoolsPerfStart(instance, type, timer())
 }
 
 export function endMeasure(instance: ComponentInternalInstance, type: string) {
-  if (instance.appContext.config.performance && perf) {
+  if (perf && instance.appContext.config.performance) {
     const startTag = `vue-${type}-${instance.uid}`
     const endTag = startTag + `:end`
     perf.mark(endTag)
@@ -32,5 +33,5 @@ export function endMeasure(instance: ComponentInternalInstance, type: string) {
     perf.clearMarks(endTag)
   }
 
-  devtoolsPerfEnd(instance, type, perf ? perf.now() : Date.now())
+  devtoolsPerfEnd(instance, type, timer())
 }
