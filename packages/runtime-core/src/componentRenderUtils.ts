@@ -148,7 +148,7 @@ export function renderComponentRoot(
         root = cloneVNode(root, fallthroughAttrs)
       } else if (__DEV__ && !accessedAttrs && root.type !== Comment) {
         const allAttrs = Object.keys(attrs)
-        let eventAttrs = '' // 性能优化
+        let eventAttrs = ''
         const extraAttrs: string[] = []
         for (let i = 0, l = allAttrs.length; i < l; i++) {
           const key = allAttrs[i]
