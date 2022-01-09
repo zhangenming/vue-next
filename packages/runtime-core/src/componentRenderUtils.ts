@@ -209,7 +209,7 @@ export function renderComponentRoot(
 
   // inherit directives
   if (vnode.dirs) {
-    if (__DEV__ && !isElementRoot(root)) {
+    if (__DEV__ && !isElementRoot(root)) { //正则
       warn(
         `Runtime directive used on component with non-element root node. ` +
           `The directives will not function as intended.`

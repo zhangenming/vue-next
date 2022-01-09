@@ -12,7 +12,7 @@ export function startMeasure(
     perf.mark(`vue-${type}-${instance.uid}`)
   }
 
-  if (__DEV__ || __FEATURE_PROD_DEVTOOLS__) {
+  if (__FEATURE_PROD_DEVTOOLS__) {
     devtoolsPerfStart(instance, type, supported ? perf.now() : Date.now())
   }
 }
@@ -31,7 +31,7 @@ export function endMeasure(instance: ComponentInternalInstance, type: string) {
     perf.clearMarks(endTag)
   }
 
-  if (__DEV__ || __FEATURE_PROD_DEVTOOLS__) {
+  if (__FEATURE_PROD_DEVTOOLS__) {
     devtoolsPerfEnd(instance, type, supported ? perf.now() : Date.now())
   }
 }
