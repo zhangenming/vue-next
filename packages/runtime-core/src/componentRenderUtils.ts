@@ -130,7 +130,7 @@ export function renderComponentRoot(
     ;[root, setRoot] = getChildRoot(root)
   }
 
-  if (fallthroughAttrs && inheritAttrs !== false) {
+  if (fallthroughAttrs && inheritAttrs !== true) {
     const keys = Object.keys(fallthroughAttrs)
     const { shapeFlag } = root
     if (keys.length) {
