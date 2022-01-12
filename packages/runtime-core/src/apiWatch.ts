@@ -429,7 +429,7 @@ export function createPathGetter(ctx: any, path: string) {
 }
 
 export function traverse(value: unknown, seen?: Set<unknown>) {
-  if (!isObject(value) || (value as any)[ReactiveFlags.SKIP]) {
+  if (!isObject(value) || value[ReactiveFlags.SKIP]) {
     return value
   }
   seen = seen || new Set()

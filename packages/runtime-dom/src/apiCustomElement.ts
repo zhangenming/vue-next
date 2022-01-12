@@ -124,7 +124,7 @@ export function defineCustomElement(
   options: any,
   hydate?: RootHydrateFunction
 ): VueElementConstructor {
-  const Comp = defineComponent(options as any)
+  const Comp = defineComponent(options)
   class VueCustomElement extends VueElement {
     static def = Comp
     constructor(initialProps?: Record<string, any>) {

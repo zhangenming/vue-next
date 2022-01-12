@@ -129,7 +129,7 @@ function reload(id: string, newComp: HMRComponent) {
     if (instance.ceReload) {
       // custom element
       hmrDirtyComponents.add(oldComp)
-      instance.ceReload((newComp as any).styles)
+      instance.ceReload(newComp.styles)
       hmrDirtyComponents.delete(oldComp)
     } else if (instance.parent) {
       // 4. Force the parent instance to re-render. This will cause all updated
@@ -142,7 +142,7 @@ function reload(id: string, newComp: HMRComponent) {
         (instance.parent.type as ComponentOptions).__asyncLoader &&
         instance.parent.ceReload
       ) {
-        instance.parent.ceReload((newComp as any).styles)
+        instance.parent.ceReload(newComp.styles)
       }
     } else if (instance.appContext.reload) {
       // root instance mounted via createApp() has a reload method
@@ -174,7 +174,7 @@ function updateComponentDef(
   extend(oldComp, newComp)
   for (const key in oldComp) {
     if (key !== '__file' && !(key in newComp)) {
-      delete (oldComp as any)[key]
+      delete oldComp[key]
     }
   }
 }

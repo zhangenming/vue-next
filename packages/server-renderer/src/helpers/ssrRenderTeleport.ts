@@ -23,7 +23,7 @@ export function ssrRenderTeleport(
   }
 
   const context = parentComponent.appContext.provides[
-    ssrContextKey as any
+    ssrContextKey
   ] as SSRContext
   const teleportBuffers =
     context.__teleportBuffers || (context.__teleportBuffers = {})
