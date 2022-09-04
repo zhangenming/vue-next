@@ -9,8 +9,7 @@ import { isArray, hasChanged, IfAny } from '@vue/shared'
 import {
   isProxy,
   toRaw,
-  isReactive,
-  toReactive
+  isReactive
 } from './reactive'
 import type { ShallowReactiveMarker } from './reactive'
 import { CollectionTypes } from './collectionHandlers'
