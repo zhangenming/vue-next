@@ -69,7 +69,7 @@ export function triggerRefValue(ref: RefBase<any>, newVal?: any) {
 
 export function isRef<T>(r: Ref<T> | unknown): r is Ref<T>
 export function isRef(r: any): r is Ref {
-  return !!r?.__v_isRef
+  return !!(r && r.__v_isRef === true)
 }
 
 export function ref<T extends object>(
@@ -103,28 +103,24 @@ function createRef(rawValue: unknown, shallow: boolean) {
 
 class RefImpl<T> {
   private _value: T
-  private _rawValue: T
 
   public dep?: Dep = undefined
   public readonly __v_isRef = true
 
   constructor(value: T, public readonly __v_isShallow: boolean) {
-    this._rawValue = __v_isShallow ? value : value
     this._value = __v_isShallow ? value : toReactive(value)
   }
 
   get value() {
     trackRefValue(this)
-    return this._value
+    const useDirectValue =
+      this.__v_isShallow || isShallow(this._value) || isReadonly(this._value)
+    return useDirectValue ? this._value : toReactive(this._value)
   }
 
   set value(newVal) {
-    const useDirectValue =
-      this.__v_isShallow || isShallow(newVal) || isReadonly(newVal)
-    if(!useDirectValue)  newVal = toRaw(newVal)
-    if (hasChanged(newVal, this._rawValue)) {
-      this._rawValue = newVal
-      this._value = useDirectValue ? newVal : toReactive(newVal)
+    if (hasChanged(newVal, this._value)) {
+      this._value = newVal
       triggerRefValue(this, newVal)
     }
   }
