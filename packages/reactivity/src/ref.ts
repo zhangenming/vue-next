@@ -104,7 +104,7 @@ function createRef(rawValue: unknown, shallow: boolean) {
 class RefImpl<T> {
   private _value: T
 
-  public dep?: Dep = undefined
+  public dep?: Dep
   public readonly __v_isRef = true
 
   constructor(value: T, public readonly __v_isShallow: boolean) {
