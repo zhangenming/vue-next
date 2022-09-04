@@ -111,7 +111,7 @@ class RefImpl<T> {
 
   get value() {
     trackRefValue(this)
-    return useDirectValue ? this._value : toReactive(this._value)
+    return this._value
   }
 
   set value(newVal) {
