@@ -113,9 +113,7 @@ class RefImpl<T> {
 
   get value() {
     trackRefValue(this)
-    const useDirectValue =
-      this.__v_isShallow || isShallow(this._value) || isReadonly(this._value)
-    return useDirectValue ? this._value : toReactive(this._value)
+    return this._value
   }
 
   set value(newVal) {
