@@ -109,7 +109,7 @@ class RefImpl<T> {
   public readonly __v_isRef = true
 
   constructor(value: T, public readonly __v_isShallow: boolean) {
-    this._rawValue = __v_isShallow ? value : toRaw(value)
+    this._rawValue = __v_isShallow ? value : value
     this._value = __v_isShallow ? value : toReactive(value)
   }
 
