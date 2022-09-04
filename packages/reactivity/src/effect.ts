@@ -233,18 +233,20 @@ export function trackEffects(
   dep: Dep,
   debuggerEventExtraInfo?: DebuggerEventExtraInfo
 ) {
-  let shouldTrack = false
-  if (effectTrackDepth <= maxMarkerBits) {
-    if (!newTracked(dep)) {
-      dep.n |= trackOpBit // set newly tracked
-      shouldTrack = !wasTracked(dep)
+    const skipTrack = (()=>{
+    if (effectTrackDepth <= maxMarkerBits) {
+      if (!newTracked(dep)) {
+        dep.n |= trackOpBit // set newly tracked
+        return wasTracked(dep)
+      }
+      return true
+    } else {
+      // Full cleanup mode.
+      return dep.has(activeEffect!)
     }
-  } else {
-    // Full cleanup mode.
-    shouldTrack = !dep.has(activeEffect!)
-  }
+  })()
 
-  if (shouldTrack) {
+  if (!skipTrack) {
     dep.add(activeEffect!)
     activeEffect!.deps.push(dep)
     if (__DEV__ && activeEffect!.onTrack) {
