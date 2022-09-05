@@ -1,6 +1,4 @@
 import {
-  reactive,
-  readonly,
   toRaw,
   ReactiveFlags,
   Target,
@@ -9,7 +7,9 @@ import {
   shallowReactiveMap,
   shallowReadonlyMap,
   isReadonly,
-  isShallow
+  isShallow,
+  toReactive,
+  toReadonly
 } from './reactive'
 import { TrackOpTypes, TriggerOpTypes } from './operations'
 import {
@@ -20,7 +20,6 @@ import {
   resetTracking
 } from './effect'
 import {
-  isObject,
   hasOwn,
   isSymbol,
   hasChanged,
@@ -133,14 +132,9 @@ function createGetter(isReadonly = false, shallow = false) {
       return targetIsArray && isIntegerKey(key) ? res : res.value
     }
 
-    if (isObject(res)) {
-      // Convert returned value into a proxy as well. we do the isObject check
-      // here to avoid invalid value warning. Also need to lazy access readonly
-      // and reactive here to avoid circular dependency.
-      return isReadonly ? readonly(res) : reactive(res)
-    }
-
-    return res
+    // Convert returned value into a proxy as well. Also need to lazy access
+    // readonly and reactive here to avoid circular dependency.
+    return isReadonly ? toReadonly(res) : toReactive(res)
   }
 }
 
