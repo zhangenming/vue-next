@@ -95,9 +95,6 @@ export function shallowRef(value?: unknown) {
 }
 
 function createRef(rawValue: unknown, shallow: boolean) {
-  if (isRef(rawValue)) {
-    return rawValue
-  }
   return new RefImpl(rawValue, shallow)
 }
 
