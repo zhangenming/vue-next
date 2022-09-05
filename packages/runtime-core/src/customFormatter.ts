@@ -1,6 +1,5 @@
-import { isReactive, isReadonly, isRef, Ref, toRaw } from '@vue/reactivity'
+import { isReactive, isReadonly, isRef, Ref, toRaw, isShallow } from '@vue/reactivity'
 import { EMPTY_OBJ, extend, isArray, isFunction, isObject } from '@vue/shared'
-import { isShallow } from '../../reactivity/src/reactive'
 import { ComponentInternalInstance, ComponentOptions } from './component'
 import { ComponentPublicInstance } from './componentPublicInstance'
 
