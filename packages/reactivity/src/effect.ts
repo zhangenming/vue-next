@@ -349,15 +349,16 @@ export function triggerEffects(
 ) {
   // spread into array for stabilization
   const effects = isArray(dep) ? dep : [...dep]
+  const elses = []
   for (const effect of effects) {
     if (effect.computed) {
       triggerEffect(effect, debuggerEventExtraInfo)
+    }else{
+      elses.push(effect)
     }
   }
-  for (const effect of effects) {
-    if (!effect.computed) {
-      triggerEffect(effect, debuggerEventExtraInfo)
-    }
+  for (const effect of elses) {
+    triggerEffect(effect, debuggerEventExtraInfo)
   }
 }
 
