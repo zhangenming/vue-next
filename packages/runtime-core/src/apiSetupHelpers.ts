@@ -303,13 +303,7 @@ type PropsWithDefaults<
       ? T[K]
       : NotUndefined<T[K]>
     : never
-} & {
-  readonly [K in BKeys]-?: K extends keyof Defaults
-    ? Defaults[K] extends undefined
-      ? boolean | undefined
-      : boolean
-    : boolean
-}
+} & { readonly [K in BKeys]-?: boolean }
 
 /**
  * Vue `<script setup>` compiler macro for providing props default values when
