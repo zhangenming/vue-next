@@ -70,4 +70,4 @@ export {
   CompilerDeprecationTypes
 } from './compat/compatConfig'
 
-export { baseParse as newParse } from './parser/index'
+// export { baseParse as newParse } from './parser/index'
