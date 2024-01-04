@@ -227,7 +227,6 @@ export function createCompatVue(
       return extendCache.get(extendOptions)
     }
 
-    const Super = this
     function SubVue(inlineOptions?: ComponentOptions) {
       if (!inlineOptions) {
         return createCompatApp(SubVue.options, SubVue)
@@ -242,15 +241,15 @@ export function createCompatVue(
         )
       }
     }
-    SubVue.super = Super
+    SubVue.super = this
     SubVue.prototype = Object.create(Vue.prototype)
     SubVue.prototype.constructor = SubVue
 
     // clone non-primitive base option values for edge case of mutating
     // extended options
     const mergeBase: any = {}
-    for (const key in Super.options) {
-      const superValue = Super.options[key]
+    for (const key in this.options) {
+      const superValue = this.options[key]
       mergeBase[key] = isArray(superValue)
         ? superValue.slice()
         : isObject(superValue)
@@ -266,8 +265,8 @@ export function createCompatVue(
 
     SubVue.options._base = SubVue
     SubVue.extend = extendCtor.bind(SubVue)
-    SubVue.mixin = Super.mixin
-    SubVue.use = Super.use
+    SubVue.mixin = this.mixin
+    SubVue.use = this.use
     SubVue.cid = ++cid
 
     extendCache.set(extendOptions, SubVue)
