@@ -2,11 +2,10 @@ import { isArray, isDate, isObject, isSymbol } from './general'
 
 function looseCompareArrays(a: any[], b: any[]) {
   if (a.length !== b.length) return false
-  let equal = true
-  for (let i = 0; equal && i < a.length; i++) {
-    equal = looseEqual(a[i], b[i])
+  for (let i = 0; i < a.length; i++) {
+    if(!looseEqual(a[i], b[i])) return false
   }
-  return equal
+  return true
 }
 
 export function looseEqual(a: any, b: any): boolean {
