@@ -211,6 +211,9 @@ export function track(target: object, type: TrackOpTypes, key: unknown): void {
     if (!depsMap) {
       targetMap.set(target, (depsMap = new Map()))
     }
+    if (depsMap.get(ITERATE_KEY) && key !== ITERATE_KEY) {
+      return
+    }
     let dep = depsMap.get(key)
     if (!dep) {
       depsMap.set(key, (dep = new Dep()))
