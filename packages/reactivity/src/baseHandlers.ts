@@ -108,7 +108,7 @@ class BaseReactiveHandler implements ProxyHandler<Target> {
     }
 
     if (!isReadonly) {
-      if(key in  target) track(target, TrackOpTypes.GET, key)
+      if(key !=='__v_skip') track(target, TrackOpTypes.GET, key)
     }
 
     if (isShallow) {
