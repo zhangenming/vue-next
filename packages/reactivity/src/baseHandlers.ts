@@ -199,11 +199,11 @@ class MutableReactiveHandler extends BaseReactiveHandler {
   }
 
   ownKeys(target: Record<string | symbol, unknown>): (string | symbol)[] {
-    track(
-      target,
-      TrackOpTypes.ITERATE,
-      isArray(target) ? 'length' : ITERATE_KEY,
-    )
+    // track(
+    //   target,
+    //   TrackOpTypes.ITERATE,
+    //   isArray(target) ? 'length' : ITERATE_KEY,
+    // )
     return Reflect.ownKeys(target)
   }
 }
