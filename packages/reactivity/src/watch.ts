@@ -349,11 +349,7 @@ export function traverse(
   depth--
   if (isRef(value)) {
     traverse(value.value, depth, seen)
-  } else if (isArray(value)) {
-    for (let i = 0; i < value.length; i++) {
-      traverse(value[i], depth, seen)
-    }
-  } else if (isSet(value) || isMap(value)) {
+  } else if (isArray(value) || isSet(value) || isMap(value)) {
     value.forEach((v: any) => {
       traverse(v, depth, seen)
     })
