@@ -53,13 +53,13 @@ export class EffectScope {
   pause(): void {
     if (this._active) {
       this._isPaused = true
-      let i, l
+      let i
       if (this.scopes) {
-        for (i = 0, l = this.scopes.length; i < l; i++) {
+        for (i = 0; i < this.scopes.length; i++) {
           this.scopes[i].pause()
         }
       }
-      for (i = 0, l = this.effects.length; i < l; i++) {
+      for (i = 0; i < this.scopes.length; i++) {
         this.effects[i].pause()
       }
     }
