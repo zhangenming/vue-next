@@ -179,6 +179,8 @@ function setChecked(
   // Only update if the checked state has changed
   if (el.checked !== checked) {
     el.checked = checked
+  }else{
+    el.checked = checked
   }
 }
 
