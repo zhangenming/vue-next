@@ -3,6 +3,7 @@ import {
   currentInstance,
   isInSSRComponentSetup,
   setCurrentInstance,
+  getCurrentInstance
 } from './component'
 import type { ComponentPublicInstance } from './componentPublicInstance'
 import { ErrorTypeStrings, callWithAsyncErrorHandling } from './errorHandling'
@@ -67,7 +68,7 @@ const createHook =
   <T extends Function = () => any>(lifecycle: LifecycleHooks) =>
   (
     hook: T,
-    target: ComponentInternalInstance | null = currentInstance,
+    target: ComponentInternalInstance | null = getCurrentInstance(),
   ): void => {
     // post-create lifecycle registrations are noops during SSR (except for serverPrefetch)
     if (
