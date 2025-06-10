@@ -4,7 +4,7 @@ const GLOBALS_ALLOWED =
   'Infinity,undefined,NaN,isFinite,isNaN,parseFloat,parseInt,decodeURI,' +
   'decodeURIComponent,encodeURI,encodeURIComponent,Math,Number,Date,Array,' +
   'Object,Boolean,String,RegExp,Map,Set,JSON,Intl,BigInt,console,Error,Symbol,' +
-  'Promise,setTimeout,setInterval'
+  'globalThis'
 
 export const isGloballyAllowed: (key: string) => boolean =
   /*@__PURE__*/ makeMap(GLOBALS_ALLOWED)
